@@ -10,6 +10,8 @@ WORKDIR /app/
 
 ## BEGIN: Dockerfile content from `cairo-lang`
 
+RUN sed -i -e 's|http://archive\.ubuntu\.com/ubuntu/|mirror://mirrors.ubuntu.com/mirrors.txt|' /etc/apt/sources.list
+
 RUN ./docker_common_deps.sh
 RUN apt-get install -y git libgmp3-dev python3-pip python3.9-venv python3.9-dev npm
 
