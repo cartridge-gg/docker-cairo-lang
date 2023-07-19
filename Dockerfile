@@ -27,11 +27,9 @@ RUN build/bazelbin/src/starkware/cairo/lang/create_cairo_lang_package_zip
 
 ## END: Dockerfile content from `cairo-lang`
 
-FROM python:3.9-alpine AS stage
+FROM python:3.9-buster AS stage
 
 ARG CAIRO_VERSION
-
-RUN apk add gmp-dev g++ gcc
 
 COPY --from=build /app/scripts/requirements.txt /work/requirements.txt
 COPY --from=build /app/cairo-lang-${CAIRO_VERSION}.zip /work/cairo-lang-${CAIRO_VERSION}.zip
@@ -46,11 +44,9 @@ RUN pip wheel --no-cache-dir --no-deps \
     --wheel-dir /wheels \
     cairo-lang-${CAIRO_VERSION}.zip
 
-FROM python:3.9-alpine
+FROM python:3.9-buster
 
 LABEL org.opencontainers.image.source=https://github.com/xJonathanLEI/docker-cairo-lang
-
-RUN apk add --no-cache libgmpxx
 
 COPY --from=stage /wheels /wheels
 RUN pip install --no-cache /wheels/* && \
