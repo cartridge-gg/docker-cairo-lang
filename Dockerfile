@@ -1,4 +1,4 @@
-FROM ciimage/python:3.9 AS build
+FROM ciimage/python:3.9-ci AS build
 
 ARG CAIRO_VERSION
 
@@ -10,10 +10,13 @@ WORKDIR /app/
 
 ## BEGIN: Dockerfile content from `cairo-lang`
 
-RUN sed -i -e 's|http://archive\.ubuntu\.com/ubuntu/|mirror://mirrors.ubuntu.com/mirrors.txt|' /etc/apt/sources.list
+RUN curl -sL https://starkware-third-party.s3.us-east-2.amazonaws.com/build_tools/node-v18.17.0-linux-x64.tar.xz -o node-v18.17.0-linux-x64.tar.xz && \
+    tar -xf node-v18.17.0-linux-x64.tar.xz -C /opt/ && \
+    rm -f node-v18.17.0-linux-x64.tar.xz
+
+ENV PATH="${PATH}:/opt/node-v18.17.0-linux-x64/bin"
 
 RUN ./docker_common_deps.sh
-RUN apt-get install -y git libgmp3-dev python3-pip python3.9-venv python3.9-dev npm
 
 # Install solc and ganache
 RUN curl https://binaries.soliditylang.org/linux-amd64/solc-linux-amd64-v0.6.12+commit.27d51765 -o /usr/local/bin/solc-0.6.12
