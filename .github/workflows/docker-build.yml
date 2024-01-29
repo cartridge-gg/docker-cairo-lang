@@ -31,4 +31,6 @@ jobs:
 
       - name: "Push Docker image"
         run: |
+          docker tag ${DOCKER_REPOSITORY}:${VERSION} ${DOCKER_REPOSITORY}:latest
           docker push ${DOCKER_REPOSITORY}:${VERSION}
+          docker push ${DOCKER_REPOSITORY}:latest
