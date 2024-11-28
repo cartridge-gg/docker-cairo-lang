@@ -8,6 +8,9 @@ RUN apt-get install -y git
 RUN git clone --recursive -b v$CAIRO_VERSION https://github.com/starkware-libs/cairo-lang /app
 WORKDIR /app/
 
+# Fix for version conflict error
+RUN sed -i s/marshmallow-dataclass==8.6.1//g /app/scripts/requirements-gen.txt
+
 ## BEGIN: Dockerfile content from `cairo-lang`
 
 RUN curl -sL https://starkware-third-party.s3.us-east-2.amazonaws.com/build_tools/node-v18.17.0-linux-x64.tar.xz -o node-v18.17.0-linux-x64.tar.xz && \
