@@ -5,8 +5,13 @@ ARG CAIRO_VERSION
 RUN apt-get update
 RUN apt-get install -y git
 
-RUN git clone --recursive -b v$CAIRO_VERSION https://github.com/starkware-libs/cairo-lang /app
+# Temporary checkout changes as v0.13.4a0 is not tagged in `cairo-lang`
+RUN git clone --recursive https://github.com/starkware-libs/cairo-lang /app
 WORKDIR /app/
+RUN git checkout 6caf2569ce973c386b432452d519bb61fcf38f60
+
+# Temporary fix for VERSION not being set in `cairo-lang`
+RUN echo "0.13.4a0" > /app/src/starkware/cairo/lang/VERSION
 
 # Fix for version conflict error
 RUN sed -i s/marshmallow-dataclass==8.6.1//g /app/scripts/requirements-gen.txt
